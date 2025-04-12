@@ -1,8 +1,8 @@
 -- Create the database
-CREATE DATABASE db_DePedro_capstone;
+CREATE DATABASE db_batch5_ems;
 
 -- Use the created database
-USE db_DePedro_capstone;
+USE db_batch5_ems;
 
 -- Create users table
 CREATE TABLE Users(
@@ -10,9 +10,13 @@ CREATE TABLE Users(
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    user_type ENUM  ('admin', 'organizer', 'attendee') NOT NULL
+    role ENUM('admin', 'organizer', 'attendee') NOT NULL
 
 );
+
+INSERT INTO Users (name, email. password, role)
+VALUES
+    ('admin', 'mainadmin@gmail.com', '20250412', 'admin');
 
 CREATE TABLE Venues(
 
@@ -51,7 +55,7 @@ CREATE TABLE Event_Vendors(
     event_id INT,
     vendor_id INT,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (vendor_id) REFERENCES Vendors(event_id),          
+    FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id),          
 );
 
 CREATE TABLE Tickets(
