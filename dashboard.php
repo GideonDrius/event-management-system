@@ -1,63 +1,39 @@
-<?php
-session_start();
-include 'db.php';
+<?php 
+include_once("connection.php");
+include_once("functions.php");
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
+session_start();
+if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
     exit();
+    
 }
 
-$user_id = $_SESSION['user_id'];
-$name = $_SESSION['name'];
-
-// Fetch user's events
-$sql = "SELECT * FROM Events WHERE organizer_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$events = $stmt->get_result();
+$user_id = $_SESSION["user_id"];
+$result = $conn->query("SELECT name FROM Users WHERE user_id = $user_id");
+$user = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard - Event Management</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dashboard</title>
 </head>
-<body>
-    <div class="dashboard-container">
-        <h1>Hello, <?php echo htmlspecialchars($name); ?> 🎉</h1>
-        <a href="logout.php" class="logout-btn">Logout</a>
+<body style="text-align:center;">
+    <h2>Welcome, <?php echo $user['name']; ?>!</h2>
+    <nav>
+    <?php if (isAdmin()): ?>
+    | <a href="manage_users.php">Manage Users</a> |
+    <?php endif; ?>
 
-        <h2>Your Events</h2>
-        <a href="create_event.php" class="create-btn">+ Create New Event</a>
-
-        <?php if ($events->num_rows > 0): ?>
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            <?php while ($event = $events->fetch_assoc()): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($event['title']); ?></td>
-                <td><?php echo $event['start_time']; ?></td>
-                <td><?php echo $event['end_time']; ?></td>
-                <td><?php echo ucfirst($event['status']); ?></td>
-                <td>
-                    <a href="edit_event.php?id=<?php echo $event['event_id']; ?>">Edit</a> |
-                    <a href="delete_event.php?id=<?php echo $event['event_id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
-        <?php else: ?>
-            <p>No events found. Create one!</p>
-        <?php endif; ?>
+        <a href="library.php">Library</a> |
+        <a href="changepassword.php">Change Password</a> |
+        <a href="logout.php">Logout</a>
+    </nav>
+    <div style="background-color:#e0e0e0; padding:10px;">
+        <h1>Event Management System</h1>
+        <h3>Welcome Panel</h3>
+        <p>This is a standard dashboard for our website project. You can manage your projects, view the library, and change your password.</p>
     </div>
 </body>
 </html>

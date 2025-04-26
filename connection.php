@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "db_batch5_ems";
+$dbname = "db_depedro_ems";
 
 // to create a connection
 $conn =  new mysqli($servername, $username, $password, $dbname);
